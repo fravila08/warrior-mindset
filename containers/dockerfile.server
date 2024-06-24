@@ -1,0 +1,16 @@
+FROM python:latest
+
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+WORKDIR /back_end
+
+COPY ../back_end/requirements.txt /back_end/
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY ../back_end/ /back_end/
+
+EXPOSE 8000
+
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "back_end.wsgi:application"]

@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: ${DJANGO_DB}
+      POSTGRES_USER: ${DJANGO_USER}
+      POSTGRES_PASSWORD: ${DJANGO_PASSWORD}
+    ports:
+      - "5433:5432"
+  api:
+    build:
+      context: .
+      dockerfile: containers/dockerfile.server
+    environment:
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
+      DJANGO_DEBUG: ${DJANGO_DEBUG}
+      DJANGO_DB: ${DJANGO_DB}
+      DJANGO_USER: ${DJANGO_USER}
+      DJANGO_PASSWORD: ${DJANGO_PASSWORD}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./back_end:/back_end
+    depends_on:
+      - postgres
